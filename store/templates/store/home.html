@@ -1,0 +1,60 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<br>
+<br>
+<div class="row">
+    {% for product in products %}
+    <div class="col-lg-4">
+
+        <img class="thumbnail" style="width: 350px;
+	    height: 350px;
+	    -webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+        -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+        box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);"
+             src='static{{ product.imageURL }}'>
+        <div class="box-element product">
+            <h6>
+                <!--<strong>
+                    {{ product.name }}
+                </strong>-->
+                <br>
+                <div class="row">
+                    <div class="col-lg-6" dir="rtl">
+                        فروشنده:
+                    </div>
+                    <div class="col-lg-6">
+                        {{ product.seller.first_name }} {{ product.seller.last_name }}
+                    </div>
+                </div>
+
+            </h6>
+            <p dir="rtl">{{ product.description|truncatechars:90 }}</p>
+            <hr>
+            {% if product.numbers is 0 %}
+                <h6 style="color: red">ناموجود</h6>
+            {% else %}
+                <h6 style="color: green">موجود</h6>
+
+            {% endif %}
+            {% if product.special %}
+            <img src="{% static 'images/special.png' %}" width="30"
+                 height="30" class="d-inline-block align-top" style="margin-top: 5px">
+            {% endif %}
+            {% if user.is_authenticated %}
+            {% if user.id is product.seller.id %}
+            {% else %}
+            <button data-product="{{product.id}}" data-action="add"
+                    class="btn btn-warning add-btn update-cart">
+                خرید
+            </button>
+            {% endif %}
+            {% endif %}
+            <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'product' product.id %}">بیشتر..</a>
+
+            <h4 style="display: inline-block; float: right">{{ product.price }} تومن</h4>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

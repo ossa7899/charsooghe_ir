@@ -1,0 +1,140 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+            <form id="form">
+                <div id="shipping-info">
+                    <hr>
+                    <p>اطلاعات مقصد:</p>
+                    <hr>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="address" placeholder="آدرس..">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="city" placeholder="شهر..">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="state" placeholder="استان..">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="zipcode" placeholder="کد پستی..">
+                    </div>
+                </div>
+                <hr>
+                <input id="form-button" class="btn btn-success btn-block" type="submit" value="ادامه">
+            </form>
+        </div>
+        <br>
+        <div class="box-element hidden" id="payment-info">
+            <small>عملیات پرداخت</small>
+            <button id="make-payment">پرداخت</button>
+            <!-- <a href="{% url 'request' %}"
+               class="btn btn-outline-success">پرداخت</a>
+            <form style='display: none;' method="POST" action="{% url 'request' %}">
+                {% csrf_token %}
+                <button type="submit">پرداخت</button>
+            </form>-->
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="box-element">
+            <a class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; بازگشت به سبد خرید</a>
+            <hr>
+            <h3>خلاصه سفارش</h3>
+            <hr>
+            {% for item in items %}
+            <div class="cart-row"
+            style="display: flex; padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid #ececec">
+                <div style="flex:2"><img class="row-image" style="width: 100px; height: 100px"
+                                         src="static{{ item.product.imageURL }}"></div>
+                <div style="flex:2;margin-top: 40px"><p>{{item.product.name}}</p></div>
+                <div style="flex:1;margin-top: 40px"><p>{{item.product.price}}تومن</p></div>
+                <div style="flex:1;margin-top: 40px"><p>x{{item.quantity}}</p></div>
+            </div>
+            {% endfor %}
+            <h5>تعداد:{{ order.get_cart_items }}</h5>
+            <h5>مجموع:{{ order.get_cart_total }}تومن </h5>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var shipping = '{{ order.shipping }}'
+    var total = '{{ order.get_cart_total }}'
+
+    if (shipping == 'False') {
+        document.getElementById('shipping-info').innerHTML = ''
+    }
+
+
+
+
+
+
+    var form = document.getElementById('form')
+    form.addEventListener('submit', function (e) {
+        e.preventDefault()
+        console.log('Form submitted..')
+        document.getElementById('form-button').classList.add('hidden')
+        document.getElementById('payment-info').classList.remove('hidden')
+    })
+
+    document.getElementById('make-payment').addEventListener('click', function (e) {
+        submitFormData()
+    })
+
+    function submitFormData() {
+        console.log("Payment button clicked")
+
+        var userFormData = {
+            'name': null,
+            'email': null,
+            'total': total,
+        }
+
+        var shippingInfo = {
+            'address': null,
+            'city': null,
+            'state': null,
+            'zipcode': null,
+        }
+
+        if (shipping != 'False') {
+            shippingInfo.address = form.address.value
+            shippingInfo.city = form.city.value
+            shippingInfo.state = form.state.value
+            shippingInfo.zipcode = form.zipcode.value
+
+        }
+
+        if (user == 'AnonymousUser') {
+            userFormData.name = form.name.value
+            userFormData.email = form.email.value
+
+        }
+
+        var url = '/process_order/'
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({'form': userFormData, 'shipping': shippingInfo})
+        })
+
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success', data);
+                alert('پرداخت کامل شد');
+                window.location.href = "{% url 'home' %}"
+            })
+
+    }
+</script>
+
+{% endblock content %}

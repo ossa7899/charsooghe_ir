@@ -1,0 +1,19 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-12 ">
+        <img class="thumbnail" style="width: 350px;
+	    height: 350px;
+	    -webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+        -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+        box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);"
+             src='static{{ product.image.url }}'>
+    </div>
+    <div class="col-md-12">{{ product.name }}</div>
+    <div class="col-md-12">{{ product.price }}</div>
+    <div class="col-md-12">{{ product.description }}</div>
+</div>
+
+
+{% endblock content %}

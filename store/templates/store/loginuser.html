@@ -1,0 +1,34 @@
+{% extends "store/main.html" %}
+
+{% block content %}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            <h2>ورود</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="phone" dir="rtl">شماره همراه</label>
+                    <input type="text" name="phone" class="form-control" id="phone">
+                </div>
+                <div class="form-group">
+                    <label for="password" dir="rtl">رمزعبور</label>
+                    <input type="password" name="password" class="form-control" id="password">
+                </div>
+                <button type="submit" class="btn btn-primary">ورود</button>
+            </form>
+            <hr>
+            <div class="text-center">
+                حساب کاربری ندارید؟ <a href="{% url 'signupuser' %}">ثبت‌نام کنید</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

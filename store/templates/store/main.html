@@ -1,0 +1,122 @@
+{% load static %}
+
+
+<html dir="rtl" lang="fa">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" href="{% static 'images/new-logo.png' %}">
+    <title>چارسوق</title>
+
+    <script type="text/javascript">
+        var user = '{{request.user}}'
+
+         function getToken(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getToken('csrftoken');
+
+    </script>
+</head>
+<body dir="rtl" >
+<nav class="navbar navbar-expand-lg navbar-light " style="background-color: #0bf50329;">
+    <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/new-logo.png' %}" width="30"
+                                                         height="30" class="d-inline-block align-top">
+        <span>چارسوق</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a href="#" onclick="$('#signOutBtn').click()"
+                   class="btn btn-outline-success">خروج</a>
+                <form style='display: none;' method="POST" action="{% url 'logoutuser' %}">
+                    {% csrf_token %}
+                    <button id="signOutBtn" type="submit">خروج</button>
+                </form>
+            </li>
+            <p id="cart-total">{{ cartItems }}</p>
+            <a class="mr-auto" href="{% url 'cart' %}">
+                <img id="cart-icon" src="{% static 'images/cart.png' %}">
+            </a>
+
+
+            {% else %}
+            <li class="nav-item">
+                <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'signupuser' %}">ثبت نام</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'loginuser' %}">ورود</a>
+            </li>
+            {% endif %}
+
+            <h6 style="margin-top: 3px">
+                {% if user.is_authenticated %}
+                <a class="mr-auto" href="{% url 'userprofile' %}">
+                    {{ user.first_name }} {{ user.last_name }}
+                    <img style="margin-top: -2px ;margin-right: 5px; margin-left: 10px" id="cart-icon"
+                         src="{% static 'images/profile.png' %}">
+                </a>
+
+                {% if user.is_seller %}
+                <a class="mr-auto" href="{% url 'sell' %}">
+                    فروش
+                    <img id="cart-icon" src="{% static 'images/sell.png' %}">
+                </a>
+                {% endif %}
+                {% endif %}
+            </h6>
+
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0 mr-auto">
+            <input class="form-control mr-sm-2" type="search" placeholder="جستجو" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">جستجو</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container">
+    {% block content %}
+
+    {% endblock content %}
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" c
+        rossorigin="anonymous"></script>
+
+<script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+
+</body>
+</html>

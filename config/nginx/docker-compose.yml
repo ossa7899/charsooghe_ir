@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - charsooghe_ir_static_volume:/charsooghe_ir/static
+    networks:
+      - nginx_network
+
+volumes:
+  charsooghe_ir_static_volume:
+    external: true
+networks:
+  nginx_network:
+    external: true

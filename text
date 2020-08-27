@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  charsooghe_ir:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/charsooghe_ir
+      - charsooghe_ir_static_volume:/charsooghe_ir/static
+      - charsooghe_ir_files_volume:/charsooghe_ir/files
+    restart: always
+    ports:
+      - "8000:8000"
+    networks:
+      - charsooghe_ir_network
+      - nginx_network
+    depends_on:
+      - charsooghe_ir_postgresql
+  charsooghe_ir_postgresql:
+    image: postgres:12
+    container_name: charsooghe_ir_postgresql
+    volumes:
+      - charsooghe_ir_postgresql:/var/lib/postgresql/data
+    restart: always
+    env_file: .env
+    ports:
+      - "5432:5432"
+    networks:
+      - charsooghe_ir_network
+
+volumes:
+  charsooghe_ir_postgresql:
+    external: true
+  charsooghe_ir_static_volume:
+    external: true
+  charsooghe_ir_files_volume:
+    external: true
+networks:
+  charsooghe_ir_network:
+    external: true
+  nginx_network:
+    external: true

@@ -1,0 +1,72 @@
+{% extends "store/main.html" %}
+
+{% block content %}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            <h2>ثبت نام</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="phone">شماره همراه</label>
+                    <input type="text" name="phone" class="form-control" id="phone" required>
+                    <small id="phoneHelp" class="form-text text-muted">شما باید یک شماره تلفن ثبت کنید</small>
+                </div>
+                <div class="form-group">
+                    <label for="email">ایمیل</label>
+                    <input type="email" name="email" class="form-control" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">آدرس</label>
+                    <input type="address" name="address" class="form-control" id="address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="first_name">نام</label>
+                    <input type="first_name" name="first_name" class="form-control" id="first_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">نام خانوادگی</label>
+                    <input type="last_name" name="last_name" class="form-control" id="last_name" required>
+                </div>
+                <div class="form-group form-check">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label class="form-check-label" for="is_seller">فروشنده؟</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="checkbox" name="is_seller" class="form-check-input" id="is_seller">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label for="introduction">معرفی</label>
+                    <textarea type="introduction" name="introduction" class="form-control" id="introduction" ></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="password1">رمز عبور</label>
+                    <input type="password" name="password1" class="form-control" id="password1" required>
+                </div>
+                <div class="form-group">
+                    <label for="password2">تایید رمز عبور</label>
+                    <input type="password" name="password2" class="form-control" id="password2" required>
+                </div>
+                <button type="submit" class="btn btn-primary">ثبت نام</button>
+            </form>
+            <hr>
+            <div class="text-center">
+                حساب کاربری دارید؟ <a href="{% url 'loginuser' %}">وارد شوید</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

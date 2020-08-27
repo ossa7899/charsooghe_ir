@@ -1,0 +1,113 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email">ایمیل</label>
+                <input type="email" name="email" class="form-control" id="email" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="address">آدرس</label>
+                <input type="address" name="address" class="form-control" id="address" value="{{ user.address }}"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">نام</label>
+                <input type="first_name" name="first_name" class="form-control" id="first_name"
+                       value="{{ user.first_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">نام خانوادگی</label>
+                <input type="last_name" name="last_name" class="form-control" id="last_name"
+                       value="{{ user.last_name }}" required>
+            </div>
+            <div class="form-group form-check">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label class="form-check-label" for="is_seller">فروشنده؟</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <input type="checkbox" name="is_seller" class="form-check-input" id="is_seller"
+                               {% if user.is_seller %}checked{% endif %}>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="introduction">معرفی</label>
+                <textarea type="introduction" name="introduction" class="form-control"
+                          id="introduction">{{ user.introduction }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">ثبت تغییرات</button>
+        </form>
+        <hr>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+<p>پیغام ها</p>
+        </div>
+</div>
+
+{% for message in messages %}
+
+{% if message.receiver.id is user.id %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">{{message.text}}</div>
+</div>
+{% endif %}
+{% endfor %}
+
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+<p>محصولات شما</p>
+    </div>
+</div>
+
+{% for product in products %}
+{% if product.seller.id is user.id %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+
+        <img class="thumbnail" style="width: 350px;
+	    height: 350px;
+	    -webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+        -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+        box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);"
+             src='static{{ product.imageURL }}'>
+        <div class="box-element product">
+            <h6>
+                <strong>
+                    {{ product.name }}
+                </strong>
+                <br>
+                <div class="row">
+                    <div class="col-lg-6" dir="rtl">
+                        فروشنده:
+                    </div>
+                    <div class="col-lg-6">
+                        {{ product.seller.first_name }} {{ product.seller.last_name }}
+                    </div>
+                </div>
+
+            </h6>
+            <p dir="rtl">{{ product.description|truncatechars:90 }}</p>
+            <hr>
+            <h4 style="display: inline-block; float: right">{{ product.price }} تومن</h4>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endfor %}
+
+{% endblock content %}
