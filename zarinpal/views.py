@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from zeep import Client
 from store.views import home
 
-MERCHANT = 'fc763348-6c00-4cbe-bd6a-d05ca8c1738d'
+MERCHANT = ''
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
 amount = 1000  # Toman / Required
 description = "توضیحات مربوط به تراکنش را در این قسمت وارد کنید"  # Required
